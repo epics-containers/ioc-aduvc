@@ -1,0 +1,10 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 4.5.1
+_src_path: https://github.com/epics-containers/ioc-template
+description: A container image for a generic IOC to support USB cameras via the ADUVC
+    support module
+git_platform: github.com
+github_org: epics-containers
+name: ioc-aduvc
+repo_uri: git@github.com:epics-containers/ioc-aduvc.git
+rtems: false
