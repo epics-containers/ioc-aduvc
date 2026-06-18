@@ -7,8 +7,7 @@ ARG DEVELOPER=${REGISTRY}/ioc-areadetector${IMAGE_EXT}-developer:3.14ec3-beta.1
 ##### build stage ##############################################################
 FROM  ${DEVELOPER} AS developer
 
-# redeclare developer arg and initiate ioc version arg for manifest
-ARG DEVELOPER
+# initiate ioc image verson variable for manifest
 ARG IOC_VERSION=unknown
 
 ENV SOURCE_FOLDER=/epics/generic-source
@@ -16,7 +15,7 @@ ENV SOURCE_FOLDER=/epics/generic-source
 # connect ioc source folder to its know location
 RUN ln -s ${SOURCE_FOLDER}/ioc ${IOC}
 
-# Get the current version of ibek
+# get the current versions of pvi and ibek
 COPY requirements.txt requirements.txt
 RUN uv pip install --upgrade -r requirements.txt
 
@@ -34,7 +33,7 @@ RUN ansible.sh ioc
 
 # generate a manifest of installed EPICS module versions and python packages
 COPY scripts/generate_manifest.py /tmp/generate_manifest.py
-RUN python3 /tmp/generate_manifest.py "${DEVELOPER}" "${IOC_VERSION}"
+RUN python3 /tmp/generate_manifest.py "${IOC_VERSION}"
 
 ##### runtime preparation stage ################################################
 FROM developer AS runtime_prep

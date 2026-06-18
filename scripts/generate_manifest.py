@@ -73,12 +73,10 @@ def get_python_packages() -> dict:
 
 
 def main() -> None:
-    base_image = sys.argv[1] if len(sys.argv) > 1 else "unknown"
-    ioc_version = sys.argv[2] if len(sys.argv) > 2 else "unknown"
+    ioc_version = sys.argv[1] if len(sys.argv) > 1 else "unknown"
 
     manifest = {
         "ioc_version": ioc_version,
-        "base_image": base_image,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "epics_modules": get_epics_modules(IBEK_SUPPORT_ROOT),
         "python_packages": get_python_packages(),
