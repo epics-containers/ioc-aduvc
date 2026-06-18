@@ -42,7 +42,7 @@ def get_epics_modules(root: pathlib.Path) -> dict:
             data = _yaml.load(filepath.read_text())
 
         except YAMLError as e:
-            print(f"warning: could not parse {filepath}: {e}", filepath=sys.stderr)
+            print(f"warning: could not parse {filepath}: {e}", file=sys.stderr)
             continue
 
         if not data:
