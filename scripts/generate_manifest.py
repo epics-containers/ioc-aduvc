@@ -35,7 +35,7 @@ def get_epics_modules(root: pathlib.Path) -> dict:
 
     modules = {}
 
-    # look though all install.yml files in the dependency tree
+    # look though all install.yml files in ibek-support built in the dependency tree
     for filepath in sorted(root.rglob("*.install.yml")):
 
         try:
