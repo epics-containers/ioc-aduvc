@@ -35,22 +35,23 @@ def get_epics_modules(root: pathlib.Path) -> dict:
 
     modules = {}
 
-    for f in sorted(root.rglob("*.install.yml")):
+    # look though all install.yml files in the dependency tree
+    for filepath in sorted(root.rglob("*.install.yml")):
 
         try:
-            data = _yaml.load(f.read_text())
+            data = _yaml.load(filepath.read_text())
 
         except YAMLError as e:
-            print(f"warning: could not parse {f}: {e}", file=sys.stderr)
+            print(f"warning: could not parse {filepath}: {e}", filepath=sys.stderr)
             continue
 
         if not data:
             continue
 
-        name = data.get("module") or f.stem.replace(".install", "")
+        name = data.get("module") or filepath.stem.replace(".install", "")
+        version = data.get("version", "unknown")
         organization = data.get("organization", DEFAULT_ORGANIZATION)
         git_repo = data.get("git_repo") or f"{organization.rstrip('/')}/{name}"
-        version = data.get("version", "unknown")
 
         modules[name] = {
             "version": version,
@@ -69,7 +70,9 @@ def get_python_packages() -> dict:
         ["uv", "pip", "list", "--python", sys.executable, "--format=json"]
     )
 
-    return {p["name"]: p["version"] for p in json.loads(out)}
+    packages = {p["name"]: p["version"] for p in json.loads(out)}
+
+    return packages
 
 
 def main() -> None:

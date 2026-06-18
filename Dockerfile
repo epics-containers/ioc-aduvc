@@ -31,7 +31,7 @@ RUN ansible.sh ADUVC
 COPY ioc ${SOURCE_FOLDER}/ioc
 RUN ansible.sh ioc
 
-# generate a manifest of installed EPICS module versions and python packages
+# generate a manifest of installed EPICS modules and python packages
 COPY scripts/generate_manifest.py /tmp/generate_manifest.py
 RUN python3 /tmp/generate_manifest.py "${IOC_VERSION}"
 
