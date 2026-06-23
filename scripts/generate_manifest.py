@@ -56,8 +56,8 @@ def get_epics_modules(root: pathlib.Path) -> dict:
         modules[name] = {
             "version": version,
             "organization": organization,
-            "git_repo": git_repo,
-            "pinned_to_commit": _looks_like_commit_sha(version), # identify when pinned to a commit and not an actual release
+            "git-repo": git_repo,
+            "pinned-to-commit": _looks_like_commit_sha(version), # identify when pinned to a commit and not an actual release
         }
 
     return modules
@@ -79,17 +79,17 @@ def main() -> None:
     ioc_version = sys.argv[1] if len(sys.argv) > 1 else "unknown"
 
     manifest = {
-        "ioc_version": ioc_version,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "epics_modules": get_epics_modules(IBEK_SUPPORT_ROOT),
-        "python_packages": get_python_packages(),
+        "ioc-version": ioc_version,
+        "generated-at": datetime.now(timezone.utc).isoformat(),
+        "epics-modules": get_epics_modules(IBEK_SUPPORT_ROOT),
+        "python-packages": get_python_packages(),
     }
 
     OUTPUT_PATH.write_text(json.dumps(manifest, indent=2))
 
     print(
-        f"wrote manifest with {len(manifest['epics_modules'])} EPICS modules "
-        f"and {len(manifest['python_packages'])} python packages to {OUTPUT_PATH}"
+        f"wrote manifest with {len(manifest['epics-modules'])} EPICS modules "
+        f"and {len(manifest['python-packages'])} python packages to {OUTPUT_PATH}"
     )
 
 
