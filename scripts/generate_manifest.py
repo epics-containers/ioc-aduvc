@@ -14,8 +14,6 @@ from datetime import datetime, timezone
 from ruamel.yaml import YAML
 from ruamel.yaml.error import YAMLError
 
-# trigger rebuild
-
 IBEK_SUPPORT_ROOT = pathlib.Path("/epics/generic-source/ibek-support")
 OUTPUT_PATH = pathlib.Path("/epics/versions.json")
 
@@ -51,7 +49,7 @@ def get_epics_modules(root: pathlib.Path) -> dict:
             continue
 
         name = data.get("module") or filepath.stem.replace(".install", "")
-        version = data.get("version", "unknown")
+        version = str(data.get("version", "unknown"))
         organization = data.get("organization", DEFAULT_ORGANIZATION)
         git_repo = data.get("git_repo") or f"{organization.rstrip('/')}/{name}"
 
