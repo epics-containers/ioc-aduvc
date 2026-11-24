@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=../ioc.schema.json
+# Copied from https://gitlab.diamond.ac.uk/controls/containers/beamline/b01-1-services
+# services/bl01c-di-dcam-01/config/ioc.yaml at commit cc8a2a3b2db38b4fa2abc06141b096c3f75dc1f3
+# Unchanged: it has no device addresses or passwords.
+# tests/run-tests.sh runs it with start.sh --test, which generates the
+# runtime assets but does not launch the IOC.
+ioc_name: bl01c-di-dcam-01
+description: synchrotron light alignment camera
+
+entities:
+  - type: devIocStats.iocAdminSoft
+    IOC: "{{ ioc_name | upper }}"
+
+  - type: ADUVC.UVC
+    P: BL01C-DI-DCAM-01
+    R: ":DRV:"
+    PORT: D1.DRV
+    productID: "6800" # productID 6800 (decimal) = product 1a90 (hex) from resourceslice
+
+  - type: ADCore.NDROI
+    ADDR: 0
+    NDARRAY_ADDR: 0
+    NDARRAY_PORT: D1.DRV
+    P: BL01C-DI-DCAM-01
+    PORT: D1.roi
+    QUEUE: 16
+    R: ":ROI:"
+    TIMEOUT: 1
+
+  - type: ADCore.NDStats
+    ADDR: 0
+    HIST_SIZE: 256
+    NCHANS: 20000
+    NDARRAY_ADDR: 0
+    NDARRAY_PORT: D1.roi
+    P: BL01C-DI-DCAM-01
+    PORT: D1.stat
+    QUEUE: 16
+    R: ":STAT:"
+    TIMEOUT: 1
+    XSIZE: 1600
+    YSIZE: 1200
+    ENABLED: 1
+
+  - type: ADCore.NDFileHDF5
+    PORT: D1.hdf
+    P: BL01C-DI-DCAM-01
+    R: ":HDF5:"
+    NDARRAY_PORT: D1.DRV
+    XMLSIZE: 1048576
+    QUEUE: 1000
+
+  - type: ADCore.NDPvxsPlugin
+    PORT: D1.PVA
+    PVNAME: BL01C-DI-DCAM-01:PVA:OUTPUT
+    P: BL01C-DI-DCAM-01
+    R: ":PVA:"
+    NDARRAY_PORT: D1.DRV
+
+  - type: epics.PostStartupCommand
+    command: |
+      dbpf BL01C-DI-DCAM-01:DRV:SizeX 1600
+      dbpf BL01C-DI-DCAM-01:DRV:SizeY 1200
+      dbpf BL01C-DI-DCAM-01:DRV:UVCApplyFormat 1
+      dbpf BL01C-DI-DCAM-01:PVA:EnableCallbacks Enable
+
+  # benign change for testing kodman.
